@@ -1,5 +1,7 @@
 # Network v4
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/eb182e6e4ed044f0923a4c03f65121b3)](https://app.codacy.com/app/Mas281/Network-v4?utm_source=github.com&utm_medium=referral&utm_content=Mas281/Network-v4&utm_campaign=badger)
+
 A fully fledged Minecraft server network system
 
 ## What is this? Why v4?
