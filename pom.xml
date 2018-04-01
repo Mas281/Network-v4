@@ -35,15 +35,13 @@
             <scope>test</scope>
         </dependency>
 
-
-        <!-- Lombok -->
+        <!-- Lombok - Shortcuts for boilerplate code -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.20</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <!-- Default build configuration -->

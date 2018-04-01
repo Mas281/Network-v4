@@ -8,7 +8,7 @@ import java.io.File;
  * File path constants for network directories
  */
 @UtilityClass
-public class Paths
+public final class Paths
 {
     /**
      * The root of the network directory structure

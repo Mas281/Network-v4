@@ -19,7 +19,7 @@ public class MongoDatabaseTest
     }
 
     @Test
-    public void testConnectionStatusMethod()
+    public void testConnectionStatusTrueWhenConnected()
     {
         assertTrue(database.isConnected(), "Database is not connected");
     }

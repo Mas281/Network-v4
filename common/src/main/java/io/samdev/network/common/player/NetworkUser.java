@@ -4,8 +4,8 @@ import io.samdev.network.common.database.mongo.DatabaseObject;
 import lombok.Getter;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
 
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -18,9 +18,10 @@ public class NetworkUser extends DatabaseObject
     @Id
     private final UUID id;
 
-    @Property
     private Rank rank;
     private String prefix;
+
+    private Instant firstJoin;
 
     private int coins;
 
@@ -30,6 +31,8 @@ public class NetworkUser extends DatabaseObject
 
         this.rank = Rank.DEFAULT;
         this.prefix = rank.getRankName();
+
+        this.firstJoin = Instant.now();
 
         this.coins = 0;
     }

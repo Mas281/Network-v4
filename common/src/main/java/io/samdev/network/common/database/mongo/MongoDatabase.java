@@ -1,16 +1,20 @@
 package io.samdev.network.common.database.mongo;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import io.samdev.network.common.database.NetworkDatabase;
 import io.samdev.network.common.player.NetworkUser;
-import io.samdev.network.common.util.Paths;
 import io.samdev.network.common.util.UtilJson;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.dao.DAO;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,10 +31,8 @@ public class MongoDatabase implements NetworkDatabase
 
     public MongoDatabase()
     {
-        this(UtilJson.fromJson(
-                MongoCredentials.class,
-                UtilJson.parse(Paths.NETWORK_CONFIG).get("mongodb")
-            ),
+        this(
+            UtilJson.parseCredentials(MongoCredentials.class, "mongodb"),
             MongoClientOptions.builder().build()
         );
     }
@@ -80,6 +82,10 @@ public class MongoDatabase implements NetworkDatabase
         datastore.ensureIndexes();
 
         userDao = new UserDao(datastore);
+
+        executor = Executors.newCachedThreadPool(
+            new ThreadFactoryBuilder().setNameFormat("Database Thread %d").build()
+        );
     }
 
     @Override
@@ -88,6 +94,10 @@ public class MongoDatabase implements NetworkDatabase
         checkArgument(isConnected(), "Client is not connected");
 
         mongoClient.close();
+
+        mongoClient = null;
+        datastore = null;
+        userDao = null;
     }
 
     @Override
@@ -105,5 +115,19 @@ public class MongoDatabase implements NetworkDatabase
         {
             super(NetworkUser.class, datastore);
         }
+    }
+
+    /**
+     * The executor to use for async operations
+     */
+    private ExecutorService executor;
+
+    @Override
+    public CompletableFuture<NetworkUser> fetchUser(UUID id)
+    {
+        return CompletableFuture.supplyAsync(
+            () -> userDao.findOne("id", id),
+            executor
+        );
     }
 }

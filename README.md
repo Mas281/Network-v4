@@ -21,15 +21,25 @@ one that can be easily built on - and hopefully won't end up getting re-written 
 ## Features
 
 Completed/In Progress:
-- MongoDB database integration with Morphia
+- MongoDB database integration with [Morphia](https://mongodb.github.io/morphia)
+- Redis server communication system
+- Global error tracking using [Sentry](https://sentry.io)
 
 Upcoming:
-- Redis JSON-based packet messaging system
+- Internationalization support - translations for different languages per-player
+- Bungee dynamic server management
 - Flexible command system
 - Discord bot for logging and server interaction
 - NodeJS based REST API for querying server information
 
-## Other Notes
+## Notes
+
+A brief description of the modules in the project:
+- common - Shared systems and utilities between all programs
+- spigot - Code used to run on the Spigot server instances (soon)
+- proxy - Code used to run on the BungeeCord proxy instance (soon)
+- bot - Code powering the discord bot (soon)
+- api - NodeJS code powering the web API (soon)
 
 The directory structure for the network is as follows, with an environment variable named "NETWORK_ROOT" pointing to
 the root folder.
@@ -43,9 +53,19 @@ the root folder.
 ├───servers (Spigot servers)
 │   ├───production
 │   └───test
-└───template (server template)
+├───template (server template)
+└───network_config.json (network-wide options, credentials)
 ```
 
 To avoid unnecessarily large jar sizes, shading is avoided wherever possible in favour of placing libraries inside
-the "libs" folder in the network directory, which are injected into the classpath via the "classpath" command-line flag
-when servers are started.
+the "libs" folder in the network directory, which are injected into the classpath at runtime via the "classpath"
+command-line flag when servers are started.
+
+Network-wide configuration options (including database credentials) are stored in the "network_config.json" file
+in the root folder.
+
+This project makes use of [Project Lombok](https://projectlombok.org) in order to reduce boilerplate code, as well as
+JUnit for unit testing.
+
+Any method/constructor parameters within the project should be assumed non-null unless specifically annotated with
+@Nullable.

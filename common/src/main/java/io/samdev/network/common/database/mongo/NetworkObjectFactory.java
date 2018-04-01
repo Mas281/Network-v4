@@ -1,5 +1,7 @@
 package io.samdev.network.common.database.mongo;
 
+import io.samdev.network.common.error.ErrorHandler;
+import io.samdev.network.common.util.Logging;
 import org.mongodb.morphia.ObjectFactory;
 import org.mongodb.morphia.mapping.DefaultCreator;
 import org.mongodb.morphia.mapping.MappingException;
@@ -44,7 +46,10 @@ class NetworkObjectFactory extends DefaultCreator
         }
         catch (ReflectiveOperationException ex)
         {
-            throw new MappingException("Unable to generate constructor for " + clazz.getName());
+            Logging.severe("Unable to generate constructor for clazz {0}", clazz.getName());
+
+            ErrorHandler.report(new MappingException("Error generating constructor for " + clazz.getName(), ex), true);
+            return null;
         }
     }
 

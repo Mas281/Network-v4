@@ -2,6 +2,7 @@ package io.samdev.network.common.database.mongo;
 
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import io.samdev.network.common.database.Credentials;
 import lombok.Getter;
 import lombok.Value;
 
@@ -9,7 +10,7 @@ import lombok.Value;
  * Class holding MongoDB credentials
  */
 @Value
-public class MongoCredentials
+public class MongoCredentials implements Credentials
 {
     private final String host;
     private final int port;

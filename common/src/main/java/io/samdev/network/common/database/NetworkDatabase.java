@@ -1,24 +1,23 @@
 package io.samdev.network.common.database;
 
+import io.samdev.network.common.player.NetworkUser;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 /**
- * Abstraction of a database service for the network
+ * Abstraction of the main database service for the network
  */
-public interface NetworkDatabase
+public interface NetworkDatabase extends Connectable
 {
     /**
-     * Attempts to connect to the database
-     */
-    void connect();
-
-    /**
-     * Disconnects from the database
-     */
-    void disconnect();
-
-    /**
-     * Determines whether a database connection is active
+     * Fetches a {@link NetworkUser}
+     * from the database in the form
+     * of a {@link CompletableFuture}
      *
-     * @return Whether a connection has been established
+     * @param id The user's ID
+     *
+     * @return CompletableFuture holding the user
      */
-    boolean isConnected();
+    CompletableFuture<NetworkUser> fetchUser(UUID id);
 }
