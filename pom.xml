@@ -11,6 +11,7 @@
 
     <modules>
         <module>common</module>
+        <module>server</module>
     </modules>
 
     <!-- Global properties -->
@@ -21,7 +22,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <buildName>${project.basedir}</buildName>
+        <buildName>${project.name}</buildName>
         <buildCommand>clean install</buildCommand>
     </properties>
 
@@ -32,6 +33,14 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito - Object mocking for unit testing -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.17.0</version>
             <scope>test</scope>
         </dependency>
 

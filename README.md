@@ -4,6 +4,21 @@
 
 A fully fledged Minecraft server network system
 
+## Libraries
+
+- [Project Lombok](https://projectlombok.org) - Reduce boilerplate code
+- [Spigot API](https://www.spigotmc.org) - Minecraft server library
+- [BungeeCord API](https://www.spigotmc.org/wiki/bungeecord) - Minecraft server proxy
+- [MongoDB Java Drivers](https://mongodb.github.io/mongo-java-driver) - MongoDB integration
+- [Morphia](https://mongodb.github.io/morphia) - Object mapping and serialization for MongoDB
+- [Jedis](https://github.com/xetorthio/jedis) - Java [Redis](https://redis.io/) library
+- [Sentry Java Client](https://docs.sentry.io/clients/java) - [Sentry.io](https://sentry.io) java implementation
+- [Google Guice](https://github.com/google/guice) - Dependency injection framework
+- [Google Guava](https://github.com/google/guava) - Miscellaneous java libraries
+- [Google Gson](https://github.com/google/gson) - JSON library
+- [Junit](https://junit.org) - Unit testing framework
+- [Mockito](http://site.mockito.org) - Object mocking for unit testing
+
 ## What is this? Why v4?
 
 As well as developing smaller, library-like projects, I like to challenge myself once in a while and attempt to create
@@ -36,7 +51,7 @@ Upcoming:
 
 A brief description of the modules in the project:
 - common - Shared systems and utilities between all programs
-- spigot - Code used to run on the Spigot server instances (soon)
+- server - Code used to run on the Spigot server instances
 - proxy - Code used to run on the BungeeCord proxy instance (soon)
 - bot - Code powering the discord bot (soon)
 - api - NodeJS code powering the web API (soon)
@@ -63,9 +78,6 @@ command-line flag when servers are started.
 
 Network-wide configuration options (including database credentials) are stored in the "network_config.json" file
 in the root folder.
-
-This project makes use of [Project Lombok](https://projectlombok.org) in order to reduce boilerplate code, as well as
-JUnit for unit testing.
 
 Any method/constructor parameters within the project should be assumed non-null unless specifically annotated with
 @Nullable.

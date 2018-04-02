@@ -130,4 +130,10 @@ public class MongoDatabase implements NetworkDatabase
             executor
         );
     }
+
+    @Override
+    public void insertUser(NetworkUser user)
+    {
+        userDao.save(user);
+    }
 }

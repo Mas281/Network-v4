@@ -7,13 +7,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import io.samdev.network.common.database.Credentials;
-import io.samdev.network.common.error.ErrorHandler;
 import lombok.experimental.UtilityClass;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * JSON parsing and serialization utilities
@@ -46,10 +47,32 @@ public class UtilJson
 
     /**
      * Parses an object of type {@link T}
+     * from a JSON file
+     *
+     * @param clazz The class to produce an instance of
+     * @param <T> The class type
+     * @param file The file to parse from
+     *
+     * @return The parsed object
+     */
+    public static <T> T fromFile(Class<T> clazz, File file)
+    {
+        checkArgument(file.exists(), "File does not exist");
+
+        try
+        {
+            return GSON.fromJson(new FileReader(file), clazz);
+        }
+        catch (FileNotFoundException ignored) { return null; }
+    }
+
+    /**
+     * Parses an object of type {@link T}
      * from a {@link JsonElement}
      *
      * @param clazz The class to produce an instance of
      * @param <T> The class type
+     * @param element The JSON element
      *
      * @return The parsed object
      */
@@ -83,17 +106,13 @@ public class UtilJson
      */
     public static JsonObject parseObject(File file)
     {
+        checkArgument(file.exists(), "File does not exist");
+
         try
         {
             return PARSER.parse(new FileReader(file)).getAsJsonObject();
         }
-        catch (FileNotFoundException ex)
-        {
-            Logging.severe("Unable to find file " + file.getName());
-
-            ErrorHandler.report(ex);
-            return null;
-        }
+        catch (FileNotFoundException ignored) { return null; }
     }
 
     /**

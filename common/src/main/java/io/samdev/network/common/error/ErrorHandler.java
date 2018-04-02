@@ -27,28 +27,28 @@ public final class ErrorHandler
      * Reports an exception to Sentry
      * and automatically throws it
      *
-     * @see #report(Exception, boolean)
+     * @see #report(Throwable, boolean)
      *
-     * @param exception The exception
+     * @param throwable The exception
      */
-    public static void report(Exception exception)
+    public static void report(Throwable throwable)
     {
-        report(exception, true);
+        report(throwable, true);
     }
 
     /**
      * Reports an exception to Sentry
      *
-     * @param exception The exception
+     * @param throwable The exception
      * @param printStackTrace Whether the exception's stacktrace should be printed
      */
-    public static void report(Exception exception, boolean printStackTrace)
+    public static void report(Throwable throwable, boolean printStackTrace)
     {
-        sentryClient.sendException(exception);
+        sentryClient.sendException(throwable);
 
         if (printStackTrace)
         {
-            exception.printStackTrace();
+            throwable.printStackTrace();
         }
     }
 }

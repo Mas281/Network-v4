@@ -19,4 +19,9 @@ public final class Paths
      * The network configuration file
      */
     public static final File NETWORK_CONFIG = new File(NETWORK_ROOT, "network_config.json");
+
+    /**
+     * The name of the server config file for each Spigot server instance
+     */
+    public static final String SERVER_CONFIG_NAME = "server_config.json";
 }

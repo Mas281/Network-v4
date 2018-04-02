@@ -20,4 +20,12 @@ public interface NetworkDatabase extends Connectable
      * @return CompletableFuture holding the user
      */
     CompletableFuture<NetworkUser> fetchUser(UUID id);
+
+    /**
+     * Inserts a newly created {@link NetworkUser}
+     * object into the database
+     *
+     * @param user The user object
+     */
+    void insertUser(NetworkUser user);
 }
