@@ -31,6 +31,8 @@ public class NetworkUser extends DatabaseObject
 
     private int coins;
 
+    private transient boolean newUser;
+
     public NetworkUser(UUID uuid, String name)
     {
         this.id = uuid;
@@ -43,6 +45,8 @@ public class NetworkUser extends DatabaseObject
         this.lastJoin = firstJoin;
 
         this.coins = 0;
+
+        this.newUser = true;
     }
 
     /**

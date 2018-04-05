@@ -1,10 +1,12 @@
-package io.samdev.network.server.core.io.samdev.network.server.core.player;
+package io.samdev.network.server.core.player;
 
 import io.samdev.network.common.player.NetworkUser;
 import io.samdev.network.common.player.Rank;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import org.bukkit.entity.Player;
+
+import java.time.Instant;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -35,10 +37,20 @@ public class OnlineUser
      * Sets the user's {@link Player} object
      *
      * @param player The player object
+     * @param proxyJoin Whether the player has just joined through the BungeeCord proxy
      */
-    public void setPlayer(Player player)
+    public void setPlayer(Player player, boolean proxyJoin)
     {
-        checkArgument(user == null, "Player is already set");
+        checkArgument(this.player == null, "Player is already set");
+
+        this.player = player;
+
+        // Update latest join if
+        // joining through BungeeCord
+        if (proxyJoin && !isNewUser())
+        {
+            updateLastJoin(Instant.now());
+        }
 
         // Check for name changes
         if (!getName().equals(player.getName()))

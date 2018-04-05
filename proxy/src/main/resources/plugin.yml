@@ -1,0 +1,5 @@
+name: ProxyCore
+version: 1.0-SNAPSHOT
+
+author: Mas281
+main: io.samdev.network.proxy.ProxyPlugin

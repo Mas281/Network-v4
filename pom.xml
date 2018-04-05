@@ -12,6 +12,7 @@
     <modules>
         <module>common</module>
         <module>server</module>
+        <module>proxy</module>
     </modules>
 
     <!-- Global properties -->
@@ -28,6 +29,22 @@
 
     <!-- Global dependencies -->
     <dependencies>
+        <!-- Lombok - Shortcuts for boilerplate code -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Google Guice - Dependency injection -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- JUnit - Unit Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -42,14 +59,6 @@
             <artifactId>mockito-core</artifactId>
             <version>2.17.0</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- Lombok - Shortcuts for boilerplate code -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -1,7 +1,7 @@
-package io.samdev.network.server.core.io.samdev.network.server.core.util;
+package io.samdev.network.server.core.util;
 
 import com.google.inject.Inject;
-import io.samdev.network.server.core.io.samdev.network.server.core.CorePlugin;
+import io.samdev.network.server.core.CorePlugin;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -16,7 +16,7 @@ import org.bukkit.plugin.PluginManager;
 public final class UtilServer
 {
     /**
-     * The core plugin instance to be
+     * The {@link CorePlugin} instance to be
      * injected upon plugin startup
      */
     @Inject

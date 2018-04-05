@@ -118,22 +118,40 @@ public class UtilJson
     /**
      * The network configuration file as a JSON object
      */
-    private static JsonObject networkConfig = parseObject(Paths.NETWORK_CONFIG);
+    private static final JsonObject NETWORK_CONFIG = parseObject(Paths.NETWORK_CONFIG);
+
+    /**
+     * Parses a {@link Class} object from
+     * a section in the network configuration
+     *
+     * @see #NETWORK_CONFIG
+     *
+     * @param clazz The class to parse as
+     * @param key The key of the object in the config
+     *
+     * @return The parsed object
+     */
+    public static <T> T parseConfigSection(Class<T> clazz, String key)
+    {
+        JsonObject object = NETWORK_CONFIG.getAsJsonObject(key);
+        return fromJson(clazz, object);
+    }
 
     /**
      * Parses a {@link Credentials} object from
      * a section in the network configuration
+     * from the key
      *
-     * @see #networkConfig
+     * @see #NETWORK_CONFIG
      *
-     * @param clazz The credentials class
-     * @param key The key of the object in the config
+     * @param clazz The class to parse as
+     * @param key The key of the credentials object in the config
      *
-     * @return The credentials object
+     * @return The parsed {@link Credentials} object
      */
-    public static <T extends Credentials> T parseCredentials(Class<? extends T> clazz, String key)
+    public static <T extends Credentials> T parseCredentials(Class<T> clazz, String key)
     {
-        JsonObject object = networkConfig.getAsJsonObject(key);
-        return fromJson(clazz, object);
+        JsonObject credentials = NETWORK_CONFIG.getAsJsonObject("credentials").getAsJsonObject(key);
+        return fromJson(clazz, credentials);
     }
 }

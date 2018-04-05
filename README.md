@@ -52,7 +52,7 @@ Upcoming:
 A brief description of the modules in the project:
 - common - Shared systems and utilities between all programs
 - server - Code used to run on the Spigot server instances
-- proxy - Code used to run on the BungeeCord proxy instance (soon)
+- proxy - Code used to run on the BungeeCord proxy instance
 - bot - Code powering the discord bot (soon)
 - api - NodeJS code powering the web API (soon)
 

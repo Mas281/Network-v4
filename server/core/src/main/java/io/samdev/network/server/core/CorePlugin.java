@@ -1,17 +1,21 @@
-package io.samdev.network.server.core.io.samdev.network.server.core;
+package io.samdev.network.server.core;
 
 import com.google.inject.Binder;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.samdev.network.common.database.NetworkDatabase;
 import io.samdev.network.common.database.mongo.MongoDatabase;
 import io.samdev.network.common.database.redis.RedisManager;
 import io.samdev.network.common.server.ServerData;
+import io.samdev.network.common.util.Logging;
+import io.samdev.network.common.util.Logging.WrappingLogProvider;
 import io.samdev.network.common.util.Paths;
 import io.samdev.network.common.util.UtilJson;
-import io.samdev.network.server.core.io.samdev.network.server.core.player.UserManager;
-import io.samdev.network.server.core.io.samdev.network.server.core.player.listener.LoginHandler;
-import io.samdev.network.server.core.io.samdev.network.server.core.util.UtilServer;
+import io.samdev.network.server.core.player.UserManager;
+import io.samdev.network.server.core.player.listener.LoginHandler;
+import io.samdev.network.server.core.util.UtilServer;
+import org.bukkit.Server;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,15 +40,26 @@ public class CorePlugin extends JavaPlugin
      */
     private Binder binder;
 
+    @Inject
+    private NetworkDatabase database;
+
+    @Inject
+    private RedisManager redisManager;
+
     @Override
     public void onEnable()
     {
+        Logging.setLogProvider(new WrappingLogProvider(getLogger()));
+
         injector = Guice.createInjector(binder ->
         {
             this.binder = binder;
 
+            // Bind required class dependencies
             bindInstance(CorePlugin.class, this);
             binder.requestStaticInjection(UtilServer.class);
+
+            bindInstance(Server.class, getServer());
 
             bindInstance(ServerData.class,
                 UtilJson.fromFile(ServerData.class, new File(Paths.SERVER_CONFIG_NAME))
@@ -53,22 +68,31 @@ public class CorePlugin extends JavaPlugin
             bindInstance(NetworkDatabase.class, new MongoDatabase());
             bindInstance(RedisManager.class, new RedisManager());
 
-            binder.bind(UserManager.class).toInstance(new UserManager());
-            bindInstance(LoginHandler.class, new LoginHandler());
+            bindInstance(UserManager.class, new UserManager());
         });
+
+        injector.injectMembers(this);
+
+        // Connect to services
+        database.connect();
+        redisManager.connect();
+
+        // Register modules
+        register(LoginHandler.class);
     }
 
     /**
-     * Injects bound class instances
-     * in to an object
+     * Creates an instance of a {@link Class}
+     * with Guice injection, and registers
+     * the class as a Bukkit {@link Listener}
+     * if applicable
      *
-     * @see #injector
-     *
-     * @param object The object
+     * @param clazz The class
      */
-    public void inject(Object object)
+    private <T> void register(Class<T> clazz)
     {
-        injector.injectMembers(object);
+        T object = injector.getInstance(clazz);
+        UtilServer.registerListenerSafe(object);
     }
 
     /**
@@ -86,15 +110,5 @@ public class CorePlugin extends JavaPlugin
     {
         binder.bind(clazz).toInstance(instance);
         UtilServer.registerListenerSafe(instance);
-    }
-
-    private <T> void get(Class<T> clazz)
-    {
-        T object = injector.getInstance(clazz);
-
-        if (object instanceof Listener)
-        {
-            UtilServer.registerListener((Listener) object);
-        }
     }
 }

@@ -1,4 +1,4 @@
-package io.samdev.network.server.core.io.samdev.network.server.core.player;
+package io.samdev.network.server.core.player;
 
 import io.samdev.network.common.player.NetworkUser;
 import org.bukkit.entity.Player;
@@ -49,13 +49,15 @@ public class UserManager
     /**
      * Handles a player joining the server
      *
-     * @see OnlineUser#setPlayer(Player)
+     * @see OnlineUser#setPlayer(Player, boolean)
      *
      * @param player The player
      */
     public void handleJoin(Player player)
     {
-        getUser(player).setPlayer(player);
+        // todo: determine proxy join
+
+        getUser(player).setPlayer(player, false);
     }
 
     /**

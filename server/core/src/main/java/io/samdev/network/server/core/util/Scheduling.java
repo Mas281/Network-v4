@@ -1,4 +1,4 @@
-package io.samdev.network.server.core.io.samdev.network.server.core.util;
+package io.samdev.network.server.core.util;
 
 import io.samdev.network.common.error.ErrorHandler;
 import lombok.experimental.UtilityClass;

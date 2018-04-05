@@ -14,7 +14,7 @@ public final class ErrorHandler
 {
     static
     {
-        SentryCredentials credentials = UtilJson.parseCredentials(SentryCredentials.class, "sentry");
+        SentryCredentials credentials = UtilJson.parseConfigSection(SentryCredentials.class, "sentry");
         sentryClient = SentryClientFactory.sentryClient(credentials.getDsn());
     }
 

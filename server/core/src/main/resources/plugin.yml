@@ -1,5 +1,5 @@
 name: NetworkCore
-version: ${project.version}
+version: 1.0-SNAPSHOT
 
 author: Mas281
-main: me.itsmas.network.server.core.CorePlugin
+main: io.samdev.network.server.core.CorePlugin
