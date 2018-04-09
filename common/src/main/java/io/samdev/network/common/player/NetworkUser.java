@@ -8,6 +8,7 @@ import org.mongodb.morphia.annotations.IndexOptions;
 import org.mongodb.morphia.annotations.Indexed;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -103,14 +104,6 @@ public class NetworkUser extends DatabaseObject
      */
     public boolean hasExactRank(Rank... ranks)
     {
-        for (Rank rank : ranks)
-        {
-            if (getRank() == rank)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return Arrays.stream(ranks).anyMatch(rank -> getRank() == rank);
     }
 }

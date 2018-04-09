@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 /**
  * Class handling the storage
@@ -17,7 +18,7 @@ public class UserManager
      * Map of online player {@link UUID}
      * objects to their {@link OnlineUser} objects
      */
-    private final Map<UUID, OnlineUser> onlineUsers = new HashMap<>();
+    private final Map<UUID, OnlineUser> onlineUsers = new WeakHashMap<>();
 
     /**
      * Fetches the {@link OnlineUser}
@@ -58,17 +59,5 @@ public class UserManager
         // todo: determine proxy join
 
         getUser(player).setPlayer(player, false);
-    }
-
-    /**
-     * Removes a player from the user map
-     *
-     * @see #onlineUsers
-     *
-     * @param player The player
-     */
-    public void removeUser(Player player)
-    {
-        onlineUsers.remove(player.getUniqueId());
     }
 }
