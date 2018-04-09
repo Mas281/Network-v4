@@ -16,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.time.Duration;
 import java.util.concurrent.ExecutionException;
@@ -46,7 +45,7 @@ public class LoginHandler implements Listener
      * to fetch a player's data before
      * timing out
      */
-    private Duration loadTimeout = Duration.ofSeconds(2L);
+    private static final Duration LOAD_TIMEOUT = Duration.ofSeconds(2L);
 
     /**
      * The message to kick players
@@ -54,7 +53,7 @@ public class LoginHandler implements Listener
      * have the required rank to
      * join the server
      */
-    private String whitelistMessage = ChatColor.RED + "You aren't allowed to join this server";
+    private static final String WHITELIST_MESSAGE = ChatColor.RED + "You aren't allowed to join this server";
 
     /**
      * Handles an {@link AsyncPlayerPreLoginEvent}
@@ -81,7 +80,7 @@ public class LoginHandler implements Listener
 
         if (!checkWhitelist(user, event))
         {
-            event.disallow(Result.KICK_OTHER, whitelistMessage);
+            event.disallow(Result.KICK_OTHER, WHITELIST_MESSAGE);
             return;
         }
 
@@ -99,36 +98,33 @@ public class LoginHandler implements Listener
      */
     private LoginResult getLoginResult(AsyncPlayerPreLoginEvent event)
     {
-        if (!database.isConnected())
-        {
-            return new LoginResult(
-                null, false, ChatColor.RED + "Database is unavailable, wait and try again"
-            );
-        }
-
+        StringBuilder kickMessage = new StringBuilder(ChatColor.RED + "");
         NetworkUser user = null;
         boolean newUser = false;
 
-        String kickMessage = ChatColor.RED + "";
-
-        try
+        if (!database.isConnected())
         {
-            user = database.fetchUser(event.getUniqueId())
-                .get(loadTimeout.toMillis(), TimeUnit.MILLISECONDS);
-
-            newUser = user == null;
+            kickMessage.append("Database is unavailable, wait and try again");
         }
-        catch (InterruptedException | ExecutionException ex)
+        else
         {
-            kickMessage += "An error occured while loading your data";
-            ErrorHandler.report(ex);
-        }
-        catch (TimeoutException ex)
-        {
-            kickMessage += "It took too long to load your data, try again";
+            try
+            {
+                user = database.fetchUser(event.getUniqueId())
+                    .get(LOAD_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+
+                newUser = user == null;
+            } catch (InterruptedException | ExecutionException ex)
+            {
+                kickMessage.append("An error occurred while loading your data");
+                ErrorHandler.report(ex);
+            } catch (TimeoutException ex)
+            {
+                kickMessage.append("It took too long to load your data, try again");
+            }
         }
 
-        return new LoginResult(user, newUser, kickMessage);
+        return new LoginResult(user, newUser, kickMessage.toString());
     }
 
     @Value
@@ -188,11 +184,5 @@ public class LoginHandler implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         userManager.handleJoin(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
-        userManager.removeUser(event.getPlayer());
     }
 }
